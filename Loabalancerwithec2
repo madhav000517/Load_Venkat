@@ -200,13 +200,13 @@
 				"Scheme": "internet-facing",
 				"SecurityGroups": [
 				  {
-					"Ref": "LoadBalancerSecurityGroup"
+					"Ref": "IndusfaceInterviewPublicSG"
 				  }
 				],
 				"Subnets": [{ "Ref" : "SubnetAPublic" }]
 			  }
 			},
-		"Indusface_Interview_Public_SG" : {
+		"IndusfaceInterviewPublicSG" : {
 			  "Type" : "AWS::EC2::SecurityGroup",
 			"Properties" : {
 			  "GroupDescription" : "Enable HTTP access via port 80 locked down to the ELB",
@@ -222,7 +222,7 @@
 		   }
         },
 
-		"Indusface_Interview_Private_SG" : {
+		"IndusfaceInterviewPrivateSG" : {
 		 "Type" : "AWS::EC2::SecurityGroup",
 		 "Properties" : {
 		   "GroupDescription" : "Indusface_Interview_Private_SG",
@@ -249,7 +249,7 @@
 			 "SourceDestCheck" : "false",
 			  "ImageId" : { "Fn::FindInMap" : [ "NatRegionMap", { "Ref" : "AWS::Region" }, "AMI" ]},
 			 "NetworkInterfaces" : [{
-				"GroupSet" : [{ "Ref" : "Indusface_Interview_Public_SG" }],
+			
 				"AssociatePublicIpAddress" : "true",
 				"DeviceIndex" : "0",
 				"DeleteOnTermination" : "true",
@@ -266,9 +266,10 @@
 			 "InstanceType" : "t2.micro",
 			 "SourceDestCheck" : "false",
 			 "KeyName" : { "Ref" : "KeyName" },
-			  "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" }, "AMI" ]},
+			  "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
+											  { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
 			 "NetworkInterfaces" : [{
-				"GroupSet" : [{ "Ref" : "Indusface_Interview_Public_SG" }],
+				"GroupSet" : [{ "Ref" : "IndusfaceInterviewPublicSG" }],
 				"AssociatePublicIpAddress" : "true",
 				"DeviceIndex" : "0",
 				"DeleteOnTermination" : "true",
@@ -285,9 +286,10 @@
 			 "InstanceType" : "t2.micro",
 			 "SourceDestCheck" : "false",
 			 "KeyName" : { "Ref" : "KeyName" },
-			  "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" }, "AMI" ]},
+			  "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
+											  { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
 			 "NetworkInterfaces" : [{
-				"GroupSet" : [{ "Ref" : "Indusface_Interview_Private_SG" }],
+				"GroupSet" : [{ "Ref" : "IndusfaceInterviewPrivateSG" }],
 				"AssociatePublicIpAddress" : "true",
 				"DeviceIndex" : "0",
 				"DeleteOnTermination" : "true",
